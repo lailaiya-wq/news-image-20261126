@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Entry program for make.fun news-image-20261126 (Python 3.13, stdlib only).
 
-The front page is pre-rendered and committed beside this file as
-``entry.png``.  This program places an exact copy of it at
+The front page is pre-rendered and committed next to this file as
+``entry.png``. This program copies it byte for byte to
 ``$MAKEFUN_OUTPUT_DIR/entry.png`` (or ``/output/entry.png`` when the
-variable is unset), so repeated runs are byte-identical by construction.
+variable is not set), so every run writes the same bytes.
 """
 
 import os

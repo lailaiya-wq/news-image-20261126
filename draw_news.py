@@ -1,9 +1,22 @@
 #!/usr/bin/env python3
-"""Draw the news-image-20261126 front page (1024x1024 PNG).
+"""Draw the news-image-20261126 front page, v2 (1024x1024 PNG).
 
 Fresh artwork for Thursday 26 November 2026: 50 stories, every one first
 reported that day (see ../news-list.md). Pure function of this file: no
 network, no clock, no randomness. Run: python3 draw_news.py
+
+v2 changes vs v1 (self-review round 1):
+- Map pins in the crowded Europe / Middle East cluster no longer overlap:
+  pins 1, 4, 5, 6 (and 3, 7, 8, 11) are drawn at small offsets with a thin
+  leader line back to their true location.
+- Mini #8 deck corrected: the rate hike was the first above 3% in about two
+  years ("Third hike since July" was not in the news list).
+- UTC strip now uses UTC times only (no "00:47 ET" mixed in).
+- Gaza city art and Nevinnomyssk plant art given more contrast; the plant
+  now shows a small flame (it was hit and ablaze); the bank art's red arrow
+  is thicker and the columns darker.
+- Two ALSO lines shortened so they no longer truncate with an ellipsis.
+- Lead #2 WHY line rewritten to a plain fact.
 """
 import os
 from PIL import Image, ImageDraw, ImageFont
@@ -86,17 +99,18 @@ def badge(d, x, y, text, fill):
 
 # ---------------------------------------------------------------- art pieces
 def art_city(d, x, y, w, h):
-    """Beige apartment blocks, one dark smoke column (Gaza)."""
-    d.rectangle([x, y, x + w, y + h], fill=(233, 224, 200))
-    d.rectangle([x + 4, y + h - 34, x + 30, y + h], fill=(196, 178, 140))
-    d.rectangle([x + 34, y + h - 48, x + 62, y + h], fill=(178, 158, 118))
-    d.rectangle([x + 66, y + h - 28, x + w - 4, y + h], fill=(206, 188, 152))
+    """Apartment blocks with a dark smoke column (Gaza)."""
+    d.rectangle([x, y, x + w, y + h], fill=(228, 216, 188))
+    d.rectangle([x + 4, y + h - 34, x + 30, y + h], fill=(178, 158, 118))
+    d.rectangle([x + 34, y + h - 48, x + 62, y + h], fill=(158, 136, 98))
+    d.rectangle([x + 66, y + h - 28, x + w - 4, y + h], fill=(188, 168, 130))
     for bx, by in [(9, h - 28), (18, h - 20), (40, h - 42), (50, h - 34),
                    (72, h - 22), (82, h - 14)]:
-        d.rectangle([x + bx, y + by, x + bx + 5, y + by + 6], fill=(255, 214, 120))
-    d.rectangle([x + w - 16, y + 2, x + w - 10, y + 18], fill=(70, 66, 60))
-    d.ellipse([x + w - 22, y + 14, x + w - 4, y + 30], fill=(120, 116, 108))
-    d.ellipse([x + w - 26, y + 24, x + w - 6, y + 42], fill=(150, 146, 138))
+        d.rectangle([x + bx, y + by, x + bx + 5, y + by + 6], fill=(255, 200, 80))
+    d.rectangle([x + w - 16, y + 2, x + w - 10, y + 20], fill=(58, 54, 48))
+    d.ellipse([x + w - 24, y + 14, x + w - 4, y + 32], fill=(96, 92, 84))
+    d.ellipse([x + w - 28, y + 26, x + w - 6, y + 46], fill=(128, 124, 116))
+    d.ellipse([x + w - 22, y + 40, x + w - 8, y + 56], fill=(160, 156, 148))
 
 
 def art_storm(d, x, y, w, h):
@@ -143,16 +157,20 @@ def art_shield(d, x, y, w, h):
 
 
 def art_plant(d, x, y, w, h):
-    """Power plant with cooling towers and smoke (Nevinnomyssk)."""
-    d.rectangle([x, y, x + w, y + h], fill=(226, 222, 210))
+    """Power plant with cooling towers, smoke and a flame (Nevinnomyssk)."""
+    d.rectangle([x, y, x + w, y + h], fill=(218, 212, 196))
     d.polygon([(x + 10, y + h - 6), (x + 16, y + 14), (x + 30, y + 14),
-               (x + 36, y + h - 6)], fill=(150, 146, 136))
+               (x + 36, y + h - 6)], fill=(128, 124, 114))
     d.polygon([(x + 42, y + h - 6), (x + 48, y + 20), (x + 62, y + 20),
-               (x + 68, y + h - 6)], fill=(130, 126, 116))
-    d.rectangle([x + 74, y + 26, x + 80, y + h - 6], fill=(110, 106, 98))
-    d.ellipse([x + 76, y + 8, x + 92, y + 22], fill=(120, 116, 108))
-    d.ellipse([x + 70, y + 16, x + 88, y + 32], fill=(150, 146, 138))
-    d.rectangle([x + 6, y + h - 14, x + w - 6, y + h - 6], fill=(90, 86, 78))
+               (x + 68, y + h - 6)], fill=(108, 104, 94))
+    d.rectangle([x + 74, y + 26, x + 80, y + h - 6], fill=(88, 84, 76))
+    d.ellipse([x + 76, y + 8, x + 92, y + 22], fill=(96, 92, 84))
+    d.ellipse([x + 70, y + 16, x + 88, y + 32], fill=(128, 124, 116))
+    d.rectangle([x + 6, y + h - 14, x + w - 6, y + h - 6], fill=(68, 64, 56))
+    d.polygon([(x + 12, y + h - 6), (x + 16, y + h - 24), (x + 20, y + h - 6)],
+              fill=(255, 140, 40))
+    d.polygon([(x + 16, y + h - 6), (x + 18, y + h - 16), (x + 20, y + h - 6)],
+              fill=(255, 200, 60))
 
 
 def art_drones(d, x, y, w, h):
@@ -162,9 +180,6 @@ def art_drones(d, x, y, w, h):
         d.line([(x + dx - 7, y + dy - 4), (x + dx + 7, y + dy + 4)], fill=(220, 220, 220), width=2)
         d.line([(x + dx - 7, y + dy + 4), (x + dx + 7, y + dy - 4)], fill=(220, 220, 220), width=2)
         d.ellipse([x + dx - 3, y + dy - 3, x + dx + 3, y + dy + 3], fill=RED)
-    for i in range(4):
-        d.line([(x + 8 + i * 4, y + h - 22), (x + 8 + i * 4, y + h - 22)],
-               fill=(0, 0, 0), width=0)
     d.polygon([(x + 6, y + h - 6), (x + 6, y + h - 22), (x + 26, y + h - 22),
                (x + 30, y + h - 14), (x + 44, y + h - 14), (x + 48, y + h - 6)],
               fill=(90, 84, 76))
@@ -186,17 +201,17 @@ def art_refinery(d, x, y, w, h):
 
 
 def art_bank(d, x, y, w, h):
-    """Bank columns with a rising red arrow (Korea rate hike)."""
-    d.rectangle([x, y, x + w, y + h], fill=(228, 234, 240))
+    """Bank columns with a thick rising red arrow (Korea rate hike)."""
+    d.rectangle([x, y, x + w, y + h], fill=(222, 230, 238))
     d.polygon([(x + 8, y + 10), (x + w // 2, y + 2), (x + w - 8, y + 10),
-               (x + w - 8, y + 16), (x + 8, y + 16)], fill=(90, 100, 112))
+               (x + w - 8, y + 16), (x + 8, y + 16)], fill=(80, 90, 104))
     for cx in (14, 34, 54, 74):
-        d.rectangle([x + cx, y + 20, x + cx + 8, y + h - 12], fill=(120, 130, 142))
-    d.rectangle([x + 6, y + h - 12, x + w - 6, y + h - 6], fill=(90, 100, 112))
+        d.rectangle([x + cx, y + 20, x + cx + 8, y + h - 12], fill=(104, 114, 128))
+    d.rectangle([x + 6, y + h - 12, x + w - 6, y + h - 6], fill=(80, 90, 104))
     d.line([(x + 10, y + h - 8), (x + 40, y + h - 18), (x + 62, y + h - 24),
-            (x + w - 14, y + h - 32)], fill=RED, width=3)
-    d.polygon([(x + w - 20, y + h - 36), (x + w - 10, y + h - 34),
-               (x + w - 14, y + h - 24)], fill=RED)
+            (x + w - 14, y + h - 32)], fill=RED, width=4)
+    d.polygon([(x + w - 22, y + h - 38), (x + w - 8, y + h - 36),
+               (x + w - 14, y + h - 22)], fill=RED)
 
 
 def art_fire(d, x, y, w, h):
@@ -297,6 +312,10 @@ PINS = {1: (34.5, 31.5), 2: (-74.0, 40.7), 3: (139.7, 35.7), 4: (46.7, 24.6),
 PIN_PLACES = {1: "GAZA", 2: "NEW YORK", 3: "TOKYO", 4: "RIYADH",
               5: "NEVINNOMYSSK", 6: "KYIV", 7: "BANGKOK", 8: "SEOUL",
               9: "FLINDERS IS.", 10: "MONGWALU", 11: "WEST JAVA"}
+# v2: pins that would overlap at this scale are drawn at a small pixel
+# offset, with a thin leader line back to their true location.
+PIN_OFFSETS = {1: (-14, 10), 3: (10, -8), 4: (16, 8), 5: (14, -10),
+               6: (-14, -12), 7: (-6, -6), 8: (-10, 8), 11: (8, 8)}
 
 
 def draw_map(d, x, y, w, h):
@@ -314,12 +333,17 @@ def draw_map(d, x, y, w, h):
     nf = font(SANS_BLACK, 9)
     for num, (lon, lat) in PINS.items():
         px, py = proj(lon, lat)
+        dx, dy = PIN_OFFSETS.get(num, (0, 0))
+        cx, cy = px + dx, py + dy
+        if (dx, dy) != (0, 0):
+            d.line([(px, py), (cx, cy)], fill=GREY, width=1)
+            d.ellipse([px - 2, py - 2, px + 2, py + 2], fill=RED)
         r = 8
-        d.ellipse([px - r, py - r, px + r, py + r], fill=RED,
+        d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=RED,
                   outline=(255, 255, 255), width=1)
         t = str(num)
         tw = nf.getlength(t)
-        d.text((px - tw / 2, py - 6.5), t, font=nf, fill=(255, 255, 255))
+        d.text((cx - tw / 2, cy - 6.5), t, font=nf, fill=(255, 255, 255))
 
 
 # ---------------------------------------------------------------- content
@@ -333,7 +357,7 @@ LEADS = [
          head="Thanksgiving nor'easter cancels 337 US flights",
          deck="Southwest cancels 125; New York and New Jersey declare emergencies "
               "as gusts reach 60 mph on the year's busiest travel day.",
-         why="WHY IT MATTERS: The storm hits the holiday table, not just the airports."),
+         why="WHY IT MATTERS: Two states declare emergencies on the year's busiest travel day."),
     dict(num=3, kick="TOKYO · MARKETS", status=("REPORTED", GREY), art=art_chart,
          head="Asia stocks rebound as US shuts for Thanksgiving",
          deck="Nikkei +0.9% to 57,499; Kospi +0.3%; Hang Seng +1.2%; Taiex +2.5% "
@@ -356,7 +380,7 @@ MINIS = [
          deck="All units halted; 120,000 b/d offline."),
     dict(num=8, kick="SEOUL · MARKETS", status=("OFFICIAL", BLUE), art=art_bank,
          head="Bank of Korea lifts rate to 3.25%",
-         deck="Third hike since July, 5–2 vote; growth up to 4.1%."),
+         deck="First above 3% in ~2 years; 5–2 vote."),
     dict(num=9, kick="FLINDERS ISLAND · DISASTER", status=("REPORTED", GREY), art=art_fire,
          head="Bushfire razes homes on Flinders Island",
          deck="6 homes lost; 14,000 ha burnt, a tenth of island."),
@@ -368,45 +392,49 @@ MINIS = [
          deck="13 more missing; rain flooded a 100m-deep pit."),
 ]
 
-# remaining 39 stories, news-list order: (number, place, one-line text)
+
+# remaining 39 stories, renumbered 12-50 in news-list order (v2 fix: the
+# v1 ALSO list kept the original news-list numbers, so 2, 4, 5, 6, 7, 8 and
+# 10 each named two different stories; now every story has exactly one
+# number 1-50, as in the 25 November v2).
 ALSO = [
-    (2, "IRAN", "BBC hears desperate pleas from women on death row"),
-    (4, "HORMUZ", "IRGC vows to choke strait to squeeze US economy"),
-    (5, "ERBIL", "Kurds protest Baghdad taking oil and border posts"),
-    (6, "ABU DHABI", "Menus must show calories from 1 June 2027"),
-    (7, "JERUSALEM", "Eisenkot resumes coalition talks with left"),
-    (8, "MOSCOW", "Kremlin accuses Kyiv of widening war to two seas"),
-    (10, "KHARKIV", "Russian drone hits flat, 2 dead, 3 hurt"),
-    (12, "LONDON", "UK and EU publish treaties with 10-year exit clause"),
-    (13, "CHANNEL", "BBC: German dealer supplied smuggling gangs"),
-    (14, "LONDON", "Tube strike halts lines in four-day week row"),
-    (15, "BRUSSELS", "EU leaders weigh €45bn Ukraine loan"),
-    (16, "KYIV", "UK funds 200MW wind farm in Ukraine"),
-    (17, "KYIV", "North Korea 'pauses' military aid to Russia"),
-    (18, "OSLO", "Norse Atlantic grounds all flights, near bankruptcy"),
-    (19, "HONG KONG", "City marks a year since Tai Po fire killed 168"),
-    (20, "DHAKA", "Garment minimum wage rises 36% after protests"),
-    (22, "KATHMANDU", "Nepal declares 5,000 missing in floods dead"),
-    (25, "SINGAPORE", "Nvidia halts server shipments to four nations"),
-    (26, "SEOUL", "Kim Do-yeong, 23, youngest two-time KBO MVP"),
-    (27, "KINSHASA", "DR Congo summons Uganda envoy over rebel post"),
-    (28, "MONGWALU", "MSF hands Ebola centre to health ministry"),
-    (29, "LUSAKA", "Zambia bans rally against term-limit repeal"),
-    (31, "SOMALIA", "BBC: as foreign troops leave, will al-Shabaab rule?"),
-    (32, "MAIDUGURI", "Borno school enrolment hits 1.8 million"),
-    (33, "SUDAN", "War and drought threaten harvests"),
-    (34, "NAIROBI", "Court: US-backed Ebola unit unconstitutional"),
-    (35, "JOHANNESBURG", "Kieswetter: crime outruns the state"),
-    (36, "OTTAWA", "Student caps test Carney's talent drive"),
-    (37, "IOWA", "Army safely detonates 5 tonnes of explosives"),
-    (38, "LOS ANGELES", "Lakers avenge loss to Jazz"),
-    (40, "WASHINGTON", "Kushner: Putin 'uninterested' in ceasefire"),
-    (41, "LIMA", "Peru central bank chief sees ratings upgrade"),
-    (42, "BUENOS AIRES", "Senate debates suspending primary elections"),
-    (43, "USA", "NFL: Bears-Lions, Eagles-Cowboys, Chiefs-Bills"),
-    (44, "WASHINGTON", "Trump's 00:47 post attacks NYT reporter"),
-    (45, "CANBERRA", "Senator Blyth defects to One Nation"),
-    (47, "SYDNEY", "Beale returns to Wallabies after five years"),
+    (12, "IRAN", "BBC hears desperate pleas from women on death row"),
+    (13, "HORMUZ", "IRGC vows to choke strait to squeeze US economy"),
+    (14, "ERBIL", "Kurds protest Baghdad taking oil and border posts"),
+    (15, "ABU DHABI", "Menus must show calories from 1 June 2027"),
+    (16, "JERUSALEM", "Eisenkot resumes coalition talks with left"),
+    (17, "MOSCOW", "Kremlin accuses Kyiv of widening war to two seas"),
+    (18, "KHARKIV", "Russian drone hits flat, 2 dead, 3 hurt"),
+    (19, "LONDON", "UK and EU publish treaties with 10-year exit clause"),
+    (20, "CHANNEL", "BBC: German dealer supplied smuggling gangs"),
+    (21, "LONDON", "Tube strike halts lines in four-day week row"),
+    (22, "BRUSSELS", "EU leaders weigh €45bn Ukraine loan"),
+    (23, "KYIV", "UK funds 200MW wind farm in Ukraine"),
+    (24, "KYIV", "North Korea 'pauses' military aid to Russia"),
+    (25, "OSLO", "Norse Atlantic grounds all flights, near bankruptcy"),
+    (26, "HONG KONG", "City marks a year since Tai Po fire killed 168"),
+    (27, "DHAKA", "Garment minimum wage rises 36% after protests"),
+    (28, "KATHMANDU", "Nepal declares 5,000 missing in floods dead"),
+    (29, "SINGAPORE", "Nvidia halts server shipments to four nations"),
+    (30, "SEOUL", "Kim Do-yeong, 23, youngest two-time KBO MVP"),
+    (31, "KINSHASA", "DR Congo summons Uganda envoy"),
+    (32, "MONGWALU", "MSF hands Ebola centre to health ministry"),
+    (33, "LUSAKA", "Zambia bans rally against term-limit repeal"),
+    (34, "SOMALIA", "BBC: as foreign troops leave, will al-Shabaab rule?"),
+    (35, "MAIDUGURI", "Borno school enrolment hits 1.8 million"),
+    (36, "SUDAN", "War and drought threaten harvests"),
+    (37, "NAIROBI", "Court: US-backed Ebola unit unconstitutional"),
+    (38, "JOHANNESBURG", "Kieswetter: crime outruns the state"),
+    (39, "OTTAWA", "Student caps test Carney's talent drive"),
+    (40, "IOWA", "Army safely detonates 5 tonnes of explosives"),
+    (41, "LOS ANGELES", "Lakers avenge loss to Jazz"),
+    (42, "WASHINGTON", "Kushner: Putin 'uninterested' in ceasefire"),
+    (43, "LIMA", "Peru central bank chief sees ratings upgrade"),
+    (44, "BUENOS AIRES", "Senate debates suspending primaries"),
+    (45, "USA", "NFL: Bears-Lions, Eagles-Cowboys, Chiefs-Bills"),
+    (46, "WASHINGTON", "Trump's 00:47 post attacks NYT reporter"),
+    (47, "CANBERRA", "Senator Blyth defects to One Nation"),
+    (48, "SYDNEY", "Beale returns to Wallabies after five years"),
     (49, "TURIN", "Sinner to miss Australian Open after knee surgery"),
     (50, "GLOBAL", "Bitcoin climbs back above $60,000"),
 ]
@@ -490,9 +518,9 @@ def build():
                    ln, font=f_lab, fill=INK)
     y += strip_h + 8
 
-    # 5. UTC strip
+    # 5. UTC strip (all times UTC)
     f_utc = font(SANS_BOLD, 10)
-    utc = ("THE DAY IN UTC    05:47  Trump posts at 00:47 ET   ·   07:45  "
+    utc = ("THE DAY IN UTC    05:47  Trump attacks NYT reporter   ·   07:45  "
            "Bangkok refinery blast   ·   12:00  London Tube strike begins   ·   "
            "US MARKETS CLOSED FOR THANKSGIVING")
     d.rectangle([M, y, M + CW, y + 20], fill=DARK)
